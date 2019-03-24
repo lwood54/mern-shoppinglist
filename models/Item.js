@@ -17,6 +17,7 @@ const ItemSchema = new Schema({
 });
 
 // have to export for access
+// create a mongoose model that is supplied the model name and the schema to use
 module.exports = Item = mongoose.model('item', ItemSchema);
 
 // will the following work? Check later after it is up and running:
