@@ -118,8 +118,10 @@ In order to use the data in the Reduc store:
 
 1. import { connect } from 'react-redux'; //allows us to get state from Redux
 2. import { getItems } from '../actions/itemActions'; // allows use of that getItems() function
-3. Now, instead of exporting ShoppingList component like normal, instead you must wrap pass it as the return function
+3. Now, instead of exporting ShoppingList component like normal, instead you must pass it as the return function
       - export default connect()(ShoppingList);
       * inside connect(), 2 arguments:
            - mapStateToProps function - allows use of props.items access to data from Redux state
            - { getItems } - an object of actions to be used
+4. Now, mapStateToProps needs to be defined and set propTypes
+5. After you you define prop name and set it to the object from state that was supplied by the rootReducer, which was supplied by the itemReducer, then you can use this.props (in class based components) or props in function components with Hooks
