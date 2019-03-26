@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
 import { connect } from 'react-redux';
 import { addItem } from '../actions/itemActions';
-import uuid from 'uuid';
 
 const ItemModal = props => {
         const [openModal, setOpenModal] = useState(false);
@@ -14,8 +13,7 @@ const ItemModal = props => {
         const handleSubmit = e => {
                 e.preventDefault();
                 const newItem = {
-                        name,
-                        id: uuid()
+                        name
                 };
                 // multiple ways to dispatch from store
                 // option 1 - import above from alternate file of actions, then load as 2nd argument

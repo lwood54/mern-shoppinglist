@@ -162,3 +162,66 @@ export default connect(mapStateToProps, {addItem, deleteItem, getItems})(ItemMod
 6. define mapStateToProps
 7. define mapDispatchToProps
       - This can either be not provided in connect(), which will default to passing dispatch and allows you to use dispatch(action()) inside component
+
+## Connecting Client side with backend mongoDB
+
+1. import axios (fetch() is a good alternate)
+2. inside itemActions
+      - import axios
+      - now getItems() will be:
+
+```
+export const getItems = () => dispatch => {
+        dispatch(setItemsLoading());
+        axios.get('/api/items') // shortened because of proxy, returns a promise with response
+                .then(res => {
+                        dispatch({
+                                type: GET_ITEMS,
+                                payload: res.data
+                        });
+                });
+};
+```
+
+3. After you get the data and supply it to the payload, the reducer needs to be updated, and the GET_ITEMS case needs to have the items: action.payload merged
+
+```
+case GET_ITEMS:
+                        return {
+                                ...state,
+                                // returning default value of initialState from array
+                                // above
+                                items: action.payload,
+                                loading: false
+                                // to switch loading back when data arrives
+                        };
+```
+
+4. Once success on getItems(), now we need to be able to delete and add directly to the DB.
+      - to add to the DB, we need to update the ADD_ITEM reducer
+      ```
+      // dispatch can be used because of the thunk middleware
+      // which enables redux to be used asynchronously
+      export const addItem = newItem => dispatch => {
+           axios.post('/api/items', newItem).then(res => {
+                   dispatch({
+                           type: ADD_ITEM,
+                           payload: res.data
+                   });
+           });
+      };
+      ```
+5. To delete the item
+
+```
+export const deleteItem = id => dispatch => {
+        axios.delete(`/api/items/${id}`).then(res => {
+                dispatch({
+                        type: DELETE_ITEM,
+                        payload: id
+                });
+        });
+};
+```
+
+6. We need to remember to double check where the actual object.id is accessed from mLab because instead of 'id', they automatically create an '\_id'

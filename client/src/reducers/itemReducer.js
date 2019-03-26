@@ -1,16 +1,10 @@
 // this is where state will go and actions are checked here, then it will dispatch can add a payload
-
-import uuid from 'uuid';
-import { GET_ITEMS, ADD_ITEM, DELETE_ITEM } from '../actions/types';
+import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from '../actions/types';
 
 // setting initial state, but will later be set by our DB connection
 const initialState = {
-        items: [
-                { id: uuid(), name: 'Eggs' },
-                { id: uuid(), name: 'Milk' },
-                { id: uuid(), name: 'Tofu' },
-                { id: uuid(), name: 'Water' }
-        ]
+        items: [],
+        loading: false
 };
 
 // we export the itemReducer function that is passed the value of state with default value of initialState,
@@ -22,17 +16,27 @@ export default function(state = initialState, action) {
         switch (action.type) {
                 case GET_ITEMS:
                         return {
-                                ...state // returning default value of initialState from array above
+                                ...state, // returning default value of initialState from array above
+                                items: action.payload,
+                                loading: false
                         };
                 case DELETE_ITEM:
                         return {
                                 ...state,
-                                items: state.items.filter(item => item.id !== action.payload)
+                                items: state.items.filter(item => item._id !== action.payload)
+                                // had to change item.id to item._id because of how mLab
+                                // auto assigns id, but defines it _id
                         };
                 case ADD_ITEM:
                         return {
                                 ...state,
-                                items: state.items.concat(action.payload)
+                                // items: state.items.concat(action.payload)
+                                items: [action.payload, ...state.items]
+                        };
+                case ITEMS_LOADING:
+                        return {
+                                ...state,
+                                loading: true
                         };
                 default:
                         return state;

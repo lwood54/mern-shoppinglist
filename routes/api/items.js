@@ -13,6 +13,7 @@ const Item = require('../../models/Item');
 // @access    Public
 // instead of app.get() like we would do in server.js, we use the express router
 // this .get() starts at the end of /api/items because of how we setup server.js
+// so when we use this with axios, we will do --> axios.get('/api/items').then()...
 router.get('/', (req, res) => {
         //fetch all items from DB
         //take model called 'Item'
@@ -26,6 +27,7 @@ router.get('/', (req, res) => {
 // @access    Public
 // instead of app.post() like we would do in server.js, we use the express router
 // this .post() starts at the end of /api/items because of how we setup server.js
+// so we will use it as --> axios.post('/api/items', item).then()...
 router.post('/', (req, res) => {
         // construct an object to insert into the DB
         const newItem = new Item({
@@ -47,11 +49,12 @@ router.post('/', (req, res) => {
         }
 */
 
-// @route       DELETE api/items/:id
+// @route       DELETE api/items/:id <-- replace :id with ${id} when in use
 // @desc        Delete an item
 // @access    Public
 // instead of app.post() like we would do in server.js, we use the express router
 // this .post() starts at the end of /api/items because of how we setup server.js
+// so will be used like this with axios --> axios.delete(`/api/items/${id}).then()...
 router.delete('/:id', (req, res) => {
         // find item by id first, we have to fetch id from params
         Item.findById(req.params.id)

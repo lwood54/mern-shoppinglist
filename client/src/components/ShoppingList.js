@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
@@ -13,20 +13,29 @@ import cls from './ShoppingList.module.css';
 import './ShoppingList.css';
 
 const ShoppingList = props => {
+        // this is needed for that initial call to the DB, now since it is setup to make
+        // call to outside DB, there is just an empty array for the initalState in the
+        // Redux store
+        useEffect(() => {
+                console.log('useEffect() --> props.getItems() RAN');
+                props.getItems();
+        }, []);
         const handleRemoveItem = id => {
                 console.log('item with id: ', id, ' will be removed');
                 props.deleteItem(id);
         };
         // map the items list to display contents and assign keys
-        const displayItems = props.reduxStore.items.map(({ id, name }, index) => {
+        const displayItems = props.reduxStore.items.map(({ _id, name }, index) => {
+                console.log('_id: ', _id);
+                console.log('name: ', name);
                 return (
-                        <CSSTransition key={id} timeout={500} classNames="fade">
+                        <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>
                                         <Button
                                                 className={cls.removeBtn}
                                                 color="danger"
                                                 size="sm"
-                                                onClick={() => handleRemoveItem(id)}
+                                                onClick={() => handleRemoveItem(_id)}
                                         >
                                                 &times;
                                         </Button>
