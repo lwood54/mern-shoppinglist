@@ -114,14 +114,51 @@ export default function(state = initialState, action) {
 
 ### src/components/ShoppingList.js
 
-In order to use the data in the Reduc store:
+In order to use the data in the Redux store:
 
 1. import { connect } from 'react-redux'; //allows us to get state from Redux
-2. import { getItems } from '../actions/itemActions'; // allows use of that getItems() function
+2. import { getItems, deleteItem } from '../actions/itemActions'; // allows use of that getItems() function
 3. Now, instead of exporting ShoppingList component like normal, instead you must pass it as the return function
       - export default connect()(ShoppingList);
       * inside connect(), 2 arguments:
            - mapStateToProps function - allows use of props.items access to data from Redux state
-           - { getItems } - an object of actions to be used
+           - { getItems, deleteItem } - an object of actions to be used
+      * Can also use mapDispatchToProps and create and object of functions, either created in file or imported from another file.
+           - There are several ways to provide dispatch actions: https://react-redux.js.org/using-react-redux/connect-mapdispatch
 4. Now, mapStateToProps needs to be defined and set propTypes
 5. After you you define prop name and set it to the object from state that was supplied by the rootReducer, which was supplied by the itemReducer, then you can use this.props (in class based components) or props in function components with Hooks
+6. You can connect the component to Redux store with a pattern similar to this:
+
+```
+import {deleteItem} from '../actions/itemActions';
+       // ... CODE ...
+
+const mapStateToProps = state => ({
+        reduxStore: state.itemsObj
+        // a more common look/pattern would be:
+        item: state.item
+});
+const mapDispatchToProps = {
+        addItem
+};
+// you can do above, or you can just pass object directly as second argument
+// redux is recognizing the object and automatically convering it
+export default connect(
+        mapStateToProps,
+        mapDispatchToProps
+)(ItemModal);
+
+// ALTERNATE & cleaner
+export default connect(mapStateToProps, {addItem, deleteItem, getItems})(ItemModal);
+```
+
+### REDUX RECAP
+
+1. wrap application in Provider from 'react-redux'
+2. create store
+3. create actions
+4. create reducers
+5. import actions to component to use Redux store
+6. define mapStateToProps
+7. define mapDispatchToProps
+      - This can either be not provided in connect(), which will default to passing dispatch and allows you to use dispatch(action()) inside component

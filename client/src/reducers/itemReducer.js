@@ -24,6 +24,16 @@ export default function(state = initialState, action) {
                         return {
                                 ...state // returning default value of initialState from array above
                         };
+                case DELETE_ITEM:
+                        return {
+                                ...state,
+                                items: state.items.filter(item => item.id !== action.payload)
+                        };
+                case ADD_ITEM:
+                        return {
+                                ...state,
+                                items: state.items.concat(action.payload)
+                        };
                 default:
                         return state;
         }
