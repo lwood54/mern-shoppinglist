@@ -10,16 +10,26 @@ const initialState = {};
 const middleware = [thunk];
 
 // creates the store that can be accessed throughout the app
-const store = createStore(
-        rootReducer,
-        initialState,
-        // must use compose() from 'redux' in order to use middleware like thunk
-        compose(
-                // use spread operator to apply any middleware to the store
-                applyMiddleware(...middleware),
-                // this allows us to use the Redux Devtools
-                window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-        )
-);
+// const store = createStore(
+//         rootReducer,
+//         initialState,
+//         // must use compose() from 'redux' in order to use middleware like thunk
+//         compose(
+//                 // use spread operator to apply any middleware to the store
+//                 applyMiddleware(...middleware),
+//                 // this allows us to use the Redux Devtools
+//                 window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+//         )
+// );
+// RECOMMENDED FIX online
+const composeEnhancers =
+        typeof window === 'object' && window._REDUX_DEVTOOLS_EXTENSION_COMPOSE_
+                ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+                : compose;
+const composingMiddlewareAndDevTools = composeEnhancers(applyMiddleware(...middleware));
+
+const store = createStore(rootReducer, initialState, composingMiddlewareAndDevTools);
+
+console.log(store.getState());
 
 export default store;
