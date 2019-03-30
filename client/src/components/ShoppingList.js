@@ -17,7 +17,6 @@ const ShoppingList = props => {
         // call to outside DB, there is just an empty array for the initalState in the
         // Redux store
         useEffect(() => {
-                console.log('useEffect() --> props.getItems() RAN');
                 props.getItems();
         }, []);
         const handleRemoveItem = id => {
@@ -26,8 +25,6 @@ const ShoppingList = props => {
         };
         // map the items list to display contents and assign keys
         const displayItems = props.reduxStore.items.map(({ _id, name }, index) => {
-                console.log('_id: ', _id);
-                console.log('name: ', name);
                 return (
                         <CSSTransition key={_id} timeout={500} classNames="fade">
                                 <ListGroupItem>

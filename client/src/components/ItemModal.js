@@ -6,7 +6,6 @@ import { addItem } from '../actions/itemActions';
 const ItemModal = props => {
         const [openModal, setOpenModal] = useState(false);
         const [name, setName] = useState('');
-
         const toggle = () => {
                 setOpenModal(!openModal);
         };
@@ -21,12 +20,16 @@ const ItemModal = props => {
                 // props.addItem(newItem);
                 // props.dispatch(addItem(newItem));
                 // props.dispatch({ type: 'ADD_ITEM', payload: newItem });
+                console.log('props.items: ', props.reduxStore.items.length);
                 props.addItem(newItem);
                 toggle();
                 setName('');
         };
         const handleChange = e => {
                 setName(e.target.value);
+        };
+        const handleUnderstand = () => {
+                toggle();
         };
         return (
                 <div>
@@ -36,26 +39,44 @@ const ItemModal = props => {
                         <Modal isOpen={openModal} toggle={toggle}>
                                 <ModalHeader toggle={toggle}>Add To Shopping List</ModalHeader>
                                 <ModalBody>
-                                        <Form onSubmit={handleSubmit}>
-                                                <FormGroup>
-                                                        <Label for="item">Item</Label>
-                                                        <Input
-                                                                type="text"
-                                                                name="name"
-                                                                id="item"
-                                                                placeholder="Add shopping item"
-                                                                onChange={handleChange}
-                                                                value={name}
-                                                        />
+                                        {props.reduxStore.items.length < 10 ? (
+                                                <Form onSubmit={handleSubmit}>
+                                                        <FormGroup>
+                                                                <Label for="item">Item</Label>
+                                                                <Input
+                                                                        type="text"
+                                                                        name="name"
+                                                                        id="item"
+                                                                        placeholder="Add shopping item"
+                                                                        onChange={handleChange}
+                                                                        value={name}
+                                                                />
+                                                                <Button
+                                                                        color="dark"
+                                                                        style={{ marginTop: '2rem' }}
+                                                                        block
+                                                                >
+                                                                        Add Item
+                                                                </Button>
+                                                        </FormGroup>
+                                                </Form>
+                                        ) : (
+                                                <div>
+                                                        <h4>
+                                                                Sorry, this is just a practice project and
+                                                                I've limited the list length to 10 items or
+                                                                fewer.
+                                                        </h4>
                                                         <Button
                                                                 color="dark"
                                                                 style={{ marginTop: '2rem' }}
                                                                 block
+                                                                onClick={handleUnderstand}
                                                         >
-                                                                Add Item
+                                                                I understand
                                                         </Button>
-                                                </FormGroup>
-                                        </Form>
+                                                </div>
+                                        )}
                                 </ModalBody>
                         </Modal>
                 </div>

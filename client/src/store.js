@@ -30,6 +30,4 @@ const composingMiddlewareAndDevTools = composeEnhancers(applyMiddleware(...middl
 
 const store = createStore(rootReducer, initialState, composingMiddlewareAndDevTools);
 
-console.log(store.getState());
-
 export default store;
